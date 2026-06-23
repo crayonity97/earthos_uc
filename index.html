@@ -1,0 +1,217 @@
+<meta charset="utf-8">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+    * {
+        font-family: 'Inter';
+    }
+    .updatec {
+        width: 100%;
+        height: 496px;
+        border: 2px solid #eee;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #fff, #e4e4e4)
+    }
+    .updatec p, h2{
+        padding: 0 10
+    }
+    #cont .chlog {
+        width: 49%
+    }
+    #cont #cont1 {
+        width: 49%;
+    }
+    #cont {
+        display: flex;
+        justify-content: space-between;
+    }   
+    #cont .build #s, #cont .release #s2 {
+        width: 100%;
+        height: 86px;
+        border: 2px solid #eee;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #fff, #e4e4e4)
+    }
+    #cont .build #s h2, #cont .build #s p, #cont .release #s2 h2 {
+        padding: 0 10;
+    }
+    table {
+        border-collapse: collapse;
+        border: 1px solid #414141;
+        margin: 11px;
+        margin-right: auto;
+        margin-left: auto; 
+    }
+    th {
+        text-align: center;
+        background: linear-gradient(180deg, #fff, #e4e4e4);
+        border: 1px solid #414141;
+        padding: 8 20;
+        font-size: 14px;
+    }
+    td {
+        border-bottom: 1px solid #a1a1a1;
+        border-top: 1px solid #a1a1a1;        
+        padding: 8px;
+        background: whitesmoke;
+    }
+    button {
+        background: linear-gradient(180deg, #fff, #e4e4e4);
+        border: none;
+        border-radius: 2.5px;
+        padding: 3 6;
+    }
+    input {
+        border-radius: 2.5px;
+        border: none;
+    }
+    #hd {
+        background: linear-gradient(180deg, rgb(144, 173, 255) 64%, rgb(89, 124, 223) 100%);
+        padding: 20;
+
+    }
+    #hd * {
+        margin: 0;
+    }
+    #cont #cont1 .e3d {
+        width: 40px;
+    }
+    body {
+        background-color: rgb(89, 124, 223); margin: 0; padding: 0;
+    }
+</style>
+</head>
+<header>
+    <div id="hd">
+        <h1 style="text-align: center; color: rgb(222, 235, 255); font-size: 52px; padding: 15;"><span style="font-size: 110px; opacity: 50%;">🌏</span>EarthOS %N Update Center</h1>
+    </div>
+</header>
+<body>
+    <div id="cont" style="margin: 8px;">
+    <div class="chlog">
+        <h1 style="text-align: center; color: rgb(222, 235, 255);">Changelog</h1>
+    <div class="updatec">
+        <h2 id="ver"></h2>
+        <p id="log"></p>
+    </div>
+    </div>
+    <div id="cont1">
+    <div class="build">
+        <h1 style="text-align: center; color: rgb(222, 235, 255);">Latest Beta build</h1>
+    <div id="s">
+        <h2 id="log2"></h2>
+        <p id="log4" style="margin-top: -15px;"></p>
+    </div>
+    </div>
+    <div class="release">
+        <h1 style="text-align: center; color: rgb(222, 235, 255);">Current latest release</h1>
+    <div id="s2">
+        <h2 id="log3"></h2>
+    </div>
+    <div style="color: rgb(222, 235, 255)" class="e3d">
+        <h3>How to install updates?</h3>
+        <p>There is a dedicated button for downloading updates</p>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div id="upcat" style="background: rgb(222, 235, 255); padding: 20; margin-top: 20px;">
+        <h1 style="text-align: center; color: rgb(89, 124, 223);">Update catalog</h1>
+        <input type="text" id="search" placeholder="Search...">
+        <button id="prev">⇚ Prev</button>
+        <button id="next">Next ⇛</button>
+        <span id="page" style="float: right;"></span>
+        <table>
+            <thead>
+            <tr>
+                <th style="width: 26%; font-size: 12px">Update name</th>
+                <th style="width: 28%">Product</th>
+                <th style="width: 15%">Path</th>
+                <th style="width: 13%">Released on</th>
+                <th style="width: 8%;">Size</th>
+                <th style="width: 6%;">Version</th>
+                <th style="width: 5%;">Download</th>
+            </tr>
+            </thead>
+            <tbody id="enum"></tbody>
+        </table>
+        <span id="info"></span>
+    </div>
+</body>
+<script>
+    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/Daisy-4/changelog')
+    .then(r => r.text())
+    .then(data => {
+        const log = data;
+        document.getElementById("log").innerHTML = `${log}`
+    });
+    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/Daisy-4/version')
+    .then(r => r.text())
+    .then(data => {
+        const ver = data;
+        document.getElementById("ver").innerHTML = `EarthOS %NAME ${ver}`
+    });
+    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/beta')
+    .then(r => r.text())
+    .then(data => {
+        const t = data;
+        const beta = t.split(":");
+        document.getElementById("log2").innerHTML = `${beta[0]}`
+        document.getElementById("log4").innerHTML = `Build ${beta[1]}`
+    });
+    // * * //
+    let a = [];
+    let c1 = 1;
+    const c = 20;
+    const sb = document.getElementById("search");
+    const IV = document.getElementById("enum");
+
+    function data(){
+        const ax = sb.value.toLowerCase();
+        return a.filter(item => 
+            item.name.toLowerCase().includes(ax) ||
+            item.product.toLowerCase().includes(ax)
+        )
+    }
+    function display(){
+        const d = data();
+        const e1 = (c1 - 1) * c 
+        const e2 = e1 + c;
+
+        IV.innerHTML = d.slice(e1, e2).map(item =>
+            `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.product}</td>
+                <td>${item.path}</td>
+                <td>${item.date}</td>
+                <td>${item.size}</td>
+                <td>${item.version}</td>
+                <td><button type="button" data-path="hi" style="background: #ccc; width: 100px" class="d3">Download</button>
+            </tr>
+        `).join("");
+        page();
+    }   
+    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/os-updates/catalogs.json')
+    .then(r => r.json())
+    .then(data => {
+        a = data;
+        display();
+    });
+    sb.addEventListener("input", () => {c1 = 1; display()});
+    document.getElementById("next").addEventListener("click", () => {const mc = Math.ceil(data().length / c); if (c1 < mc) {c1++; display()}})
+    document.getElementById("prev").addEventListener("click", () => {if (c1 > 1) {c1--; display()}});
+    IV.addEventListener("click", (e) => {const data3 = e.target.closest(".d3"); if (!data3) return; const data2 = data3.dataset.path; if (!data2) return; window.top.postMessage({file: data2}, "*");})
+    // IV.addEventListener("click", (e) => {const data3 = e.target.closest(".d3"); if (!data3) return; const data2 = data3.dataset.path; if (!data2) return; console.log(data2)})
+    function page(){
+    const me = Math.ceil(data().length / c);
+    document.getElementById("page").innerHTML = `Page ${c1}/${me}`
+    }
+    // ** ** //
+    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/latest')
+    .then(r => r.json())
+    .then(data => {
+        const latest = data;
+        document.getElementById("log3").innerHTML = `${latest}`
+    })
+</script>
