@@ -243,10 +243,10 @@
     document.getElementById("page").innerHTML = `Page ${c1}/${me}`
     }
     // ** ** //
-    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/latest')
+    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/latest_release')
     .then(r => r.json())
     .then(data => {
         const latest = data;
-        document.getElementById("log3").innerHTML = `${latest}`
+        document.getElementById("log3").innerHTML = `EarthOS  ${latest.n} ${latest.v}`
     })
 </script>
