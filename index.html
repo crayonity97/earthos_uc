@@ -193,6 +193,12 @@
         document.getElementById("log2").innerHTML = `${beta[0]}`
         document.getElementById("log4").innerHTML = `Build ${beta[1]}`
     });
+    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/latest_release')
+    .then(r => r.json())
+    .then(data => {
+        const latest = data;
+        document.getElementById("log3").innerHTML = `EarthOS  ${latest.n} ${latest.v}`
+    })
     // * * //
     let a = [];
     let c1 = 1;
@@ -243,10 +249,4 @@
     document.getElementById("page").innerHTML = `Page ${c1}/${me}`
     }
     // ** ** //
-    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/latest_release')
-    .then(r => r.json())
-    .then(data => {
-        const latest = data;
-        document.getElementById("log3").innerHTML = `EarthOS  ${latest.n} ${latest.v}`
-    })
 </script>
