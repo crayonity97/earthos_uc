@@ -38,7 +38,7 @@
     table {
         border-collapse: collapse;
         border: 1px solid #414141;
-        margin: 11px;
+        margin: 2px;
         margin-right: auto;
         margin-left: auto; 
     }
@@ -66,7 +66,7 @@
         border: none;
     }
     #hd {
-        background: linear-gradient(180deg, rgb(144, 173, 255) 64%, rgb(89, 124, 223) 100%);
+        background: linear-gradient(180deg, rgb(144, 173, 255, 1) 64%, rgb(89, 124, 223, 0) 100%);
         padding: 20;
 
     }
@@ -74,22 +74,40 @@
         margin: 0;
     }
     #cont #cont1 .e3d {
-        width: 40px;
+        width: 100%;
     }
     body {
-        background-color: rgb(89, 124, 223); margin: 0; padding: 0;
+        /** background-color: rgb(89, 124, 223); margin: 0; padding: 0; **/
+        background-image: url("IMG_20260103_085805.jpg"); margin: 0; padding: 0;
+    }
+    #os, #os option {
+        user-select: none;
+        font-family: inherit;
+        margin-top: -5px;
+        border: none;
+        border-radius: 4px;
+        padding: 2;
+        background-color: rgb(204, 217, 255);
     }
 </style>
 </head>
 <header>
     <div id="hd">
-        <h1 style="text-align: center; color: rgb(222, 235, 255); font-size: 52px; padding: 15;"><span style="font-size: 110px; opacity: 50%;">🌏</span>EarthOS %N Update Center</h1>
+        <h1 style="text-align: center; color: rgb(222, 235, 255); font-size: 52px; padding: 15;"><span style="font-size: 110px; opacity: 50%;">🌏</span>EarthOS Update Center</h1>
     </div>
 </header>
 <body>
     <div id="cont" style="margin: 8px;">
     <div class="chlog">
-        <h1 style="text-align: center; color: rgb(222, 235, 255);">Changelog</h1>
+        <span style="color: rgb(222, 235, 255)">
+            Select your OS: 
+            <select id="os">
+                <option value="5" style="font-family: 'Inter';">unknown-5</option>
+                <option value="4">Daisy</option>
+                <option value="3">Cedar</option>
+            </select>
+        </span>
+        <h3 style="text-align: center; color: rgb(222, 235, 255);" id="chlog2"></h3>
     <div class="updatec">
         <h2 id="ver"></h2>
         <p id="log"></p>
@@ -110,7 +128,9 @@
     </div>
     <div style="color: rgb(222, 235, 255)" class="e3d">
         <h3>How to install updates?</h3>
-        <p>There is a dedicated button for downloading updates</p>
+        <p>There is a dedicated button for downloading updates, just click "Download" and let the update center do the rest on the Scratch OS' side.</p>
+        <h3>Can this be visited on EarthOS' default browser?</h3>
+        <p>Yes! It it hosted via <a href="https://crayonity97.github.io/earthos_uc" style="font-family: 'Courier New', Courier, monospace;">https://crayonity97.github.io/earthos_uc</a>.</p>
     </div>
     </div>
     </div>
@@ -139,19 +159,33 @@
     </div>
 </body>
 <script>
-    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/Daisy-4/changelog')
+    let os;
+    let osv;
+
+    function select(){
+        let o1s = document.getElementById("os");
+        os = o1s.options[o1s.selectedIndex].text;
+        osv = o1s.value;
+
+        fetch(`https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/${os}-${osv}/version`)
+        .then(r => r.text())
+        .then(data => {
+        const ver = data;
+        document.getElementById("ver").innerHTML = `EarthOS ${os} ${ver}`
+        document.getElementById("chlog2").innerHTML = `EarthOS ${os} Changelog`
+    });
+    }
+    
+    const wait = document.getElementById("os");
+    wait.addEventListener("change", select);
+
+    fetch(`https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/${os}-${osv}/changelog`)
     .then(r => r.text())
     .then(data => {
         const log = data;
         document.getElementById("log").innerHTML = `${log}`
     });
-    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/Daisy-4/version')
-    .then(r => r.text())
-    .then(data => {
-        const ver = data;
-        document.getElementById("ver").innerHTML = `EarthOS %NAME ${ver}`
-    });
-    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/beta')
+    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/beta')
     .then(r => r.text())
     .then(data => {
         const t = data;
@@ -187,16 +221,17 @@
                 <td>${item.date}</td>
                 <td>${item.size}</td>
                 <td>${item.version}</td>
-                <td><button type="button" data-path="hi" style="background: #ccc; width: 100px" class="d3">Download</button>
+                <td><button type="button" data-path="${item.path}" style="background: #ccc; width: 100px" class="d3">Download</button>
             </tr>
         `).join("");
         page();
     }   
-    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/os-updates/catalogs.json')
+    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/catalogs.json')
     .then(r => r.json())
     .then(data => {
         a = data;
         display();
+        select();
     });
     sb.addEventListener("input", () => {c1 = 1; display()});
     document.getElementById("next").addEventListener("click", () => {const mc = Math.ceil(data().length / c); if (c1 < mc) {c1++; display()}})
@@ -208,7 +243,7 @@
     document.getElementById("page").innerHTML = `Page ${c1}/${me}`
     }
     // ** ** //
-    fetch('https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/latest')
+    fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/latest')
     .then(r => r.json())
     .then(data => {
         const latest = data;
