@@ -74,7 +74,7 @@
         margin: 0;
     }
     #cont #cont1 .e3d {
-        width: 100%;
+        width: 80%;
     }
     body {
         /** background-color: rgb(89, 124, 223); margin: 0; padding: 0; **/
@@ -88,6 +88,16 @@
         border-radius: 4px;
         padding: 2;
         background-color: rgb(204, 217, 255);
+    }
+    .d3 {
+         background: #f7f7f7;
+         border: 1px solid #ccc;
+         width: 100px;
+    }
+    .d3:hover{
+        background: rgb(201, 235, 255);
+        border: 1px solid #98c1c9;
+        width: 100px;
     }
 </style>
 </head>
@@ -125,6 +135,7 @@
         <h1 style="text-align: center; color: rgb(222, 235, 255);">Current latest release</h1>
     <div id="s2">
         <h2 id="log3"></h2>
+        <p id="log8" style="margin-top: -15px;"></p>
     </div>
     <div style="color: rgb(222, 235, 255)" class="e3d">
         <h3>How to install updates?</h3>
@@ -173,18 +184,18 @@
         const ver = data;
         document.getElementById("ver").innerHTML = `EarthOS ${os} ${ver}`
         document.getElementById("chlog2").innerHTML = `EarthOS ${os} Changelog`
+    });   
+         fetch(`https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/${os}-${osv}/changelog`)
+        .then(r => r.text())
+        .then(data => {
+            const log = data;
+            document.getElementById("log").innerHTML = `${log}`
     });
     }
     
     const wait = document.getElementById("os");
     wait.addEventListener("change", select);
 
-    fetch(`https://raw.githubusercontent.com/crayonity97/EarthOS/refs/heads/main/${os}-${osv}/changelog`)
-    .then(r => r.text())
-    .then(data => {
-        const log = data;
-        document.getElementById("log").innerHTML = `${log}`
-    });
     fetch('https://raw.githubusercontent.com/crayonity97/earthos_uc/refs/heads/main/beta')
     .then(r => r.text())
     .then(data => {
@@ -198,6 +209,7 @@
     .then(data => {
         const latest = data;
         document.getElementById("log3").innerHTML = `EarthOS  ${latest.n} ${latest.v}`
+        document.getElementById("log8").innerHTML = `${latest.d}`
     })
     // * * //
     let a = [];
@@ -227,7 +239,7 @@
                 <td>${item.date}</td>
                 <td>${item.size}</td>
                 <td>${item.version}</td>
-                <td><button type="button" data-path="${item.path}" style="background: #ccc; width: 100px" class="d3">Download</button>
+                <td><button type="button" data-path="${item.path}" class="d3">Download</button>
             </tr>
         `).join("");
         page();
